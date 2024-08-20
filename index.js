@@ -1,4 +1,6 @@
 import express from 'express';
+import { servicesData } from './data/servicesData.js';
+import { members } from './data/members.js';
 
 const app = express();
 const port = 3000;
@@ -15,35 +17,47 @@ app.get('/services', (req, res) => {
     return res.send('Services page');
 });
 
-app.get('/services/design', (req, res) => {
-    return res.send('Services page: design');
-});
+app.get('/services/:serviceName', (req, res) => {
+    if (servicesData.includes(req.params.serviceName)) {
+        return res.send(`About "${req.params.serviceName}" service...`);
+    }
 
-app.get('/services/ux', (req, res) => {
-    return res.send('Services page: UX');
-});
-
-app.get('/services/coding', (req, res) => {
-    return res.send('Services page: Programming');
-});
-
-app.get('/services/*', (req, res) => {
     return res.send('Services page: such service is not recognized...');
+});
+
+app.get('/services/:serviceName/members', (req, res) => {
+    if (servicesData.includes(req.params.serviceName)) {
+        return res.send(`Paslaugos "${req.params.serviceName}" nariu sarasas...`);
+    }
+
+    return res.send('Services page: such service is not recognized...');
+});
+
+app.get('/services/:serviceName/members/:memberName', (req, res) => {
+    const { serviceName, memberName } = req.params;
+
+    if (!servicesData.includes(serviceName)) {
+        return res.send('Services page: such service is not recognized...');
+    }
+
+    if (!members.includes(memberName)) {
+        return res.send(`Paslaugoje "${serviceName}" nario "${memberName}" nepavyko rasti...`);
+    }
+
+    return res.send(`Paslaugos "${serviceName}" nario "${memberName}" informacija...`);
 });
 
 app.get('/team', (req, res) => {
     return res.send('Team page');
 });
 
-app.get('/team/chuck', (req, res) => {
-    return res.send('Team member page: Chuck');
-});
-
-app.get('/team/prime', (req, res) => {
-    return res.send('Team member page: Prime');
-});
-
 app.get('/team/:name', (req, res) => {
+    const members = ['chuck', 'lolo', 'prime', 'xena'];
+
+    if (members.includes(req.params.name)) {
+        return res.send(`Team member: "${req.params.name}" all info about this person.`);
+    }
+
     return res.send(`Team member "${req.params.name}" page not found.`);
 });
 
@@ -86,3 +100,23 @@ app.get('*', (req, res) => {
 app.listen(port, () => {
     console.log(`App running on: http://localhost:${port}`);
 });
+
+
+/*
+
+/students
+Mokosi 4 studentai: Jonas, Maryte, Petras ir Ona.
+
+/students/jonas
+/students/Jonas
+/students/JoNas
+/students/JONAS
+Studentas, vardu Jonas yra 99 metu amziaus ir yra vedes.
+
+/students/chuck
+Studento, vardu chuck nera.
+
+/students/Chuck
+Studento, vardu Chuck nera.
+
+*/
