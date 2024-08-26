@@ -12,6 +12,16 @@ Visi pinigu mainai vyksta centais.
 
 Visi pinigu "spausdinimai" vykdomi formatuojant teksta, pvz: `123,45 Eur`.
 
+Uzklausu adresai neturi buti jautrus didziosioms/mazosioms raidems, t.y.
+
+```
+/api/account/{vardas}-{pavarde}
+/api/account/john-doe
+/api/account/John-doe
+/api/account/John-Doe
+/api/account/JOHN-DOE
+```
+
 ## Reikalingi API endpoint'ai
 
 ### /api/account
@@ -31,6 +41,7 @@ Perduodami duomenys:
 Reikalavimai:
 
 -   saskaita gali susikurti tik pilnameciai (18m)
+-   vardo ir pavardes kombinacija turi buti unikali
 
 > GET:
 
